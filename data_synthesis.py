@@ -14,7 +14,8 @@ for file_name in txt_files:
     df = df.drop(0)
     # df1 = df.iloc[[0, df["Range (km)"].idxmin(),-1]]
     # a = min(df.loc[:,"Range (km)"] )
-    norad_id = re.findall(r'[0-9]+', txt_files[0])
+    norad_id = re.findall(r'[0-9]+', file_name)
+    # print(norad_id)
 
     data['NORAD_ID'].append(norad_id[0])
     data['N'].append(norad_id[1])

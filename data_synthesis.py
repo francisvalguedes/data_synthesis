@@ -2,7 +2,7 @@ import glob
 import pandas as pd
 import re
 
-txt_files = glob.glob('sintese/*.txt')
+txt_files = glob.glob('data/*.txt')
 
 # print(txt_files)
 

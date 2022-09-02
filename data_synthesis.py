@@ -17,15 +17,15 @@ except:
 txt_files = glob.glob('trajectory/*.trn')
 # print(txt_files)
 
-data = {'NORAD_CAT_ID':[], 'OBJECT_NAME':[], "H0":[], "RANGE_H0":[],"MIN_RANGE_H":[],"MIN_RANGE_PT":[],
-                    "MIN_RANGE":[],"END_H":[], "END_PT":[], "END_RANGE":[],"RCS":[] }
+data = {'NORAD_CAT_ID':[], 'OBJECT_NAME':[], "RCS":[], "H0":[], "RANGE_H0":[],"MIN_RANGE_H":[],"MIN_RANGE_PT":[],
+                    "MIN_RANGE":[],"END_H":[], "END_PT":[], "END_RANGE":[] }
 
 print('Reading trajectory files for summary')
 for file_name in txt_files:
     #print(file_name)
     df = pd.read_csv(file_name,skiprows=[0,1], header=None)
     #df.columns = ['ENU_E','ENU_N','ENU_U']
-    df.to_csv( 'output/' + file_name.split("\\")[1], index=False, header=[str(len(df.index)),'1000','1'],float_format="%.3f")
+    df.to_csv( 'output' + file_name.split('trajectory')[1], index=False, header=[str(len(df.index)-1),'1000','1'],float_format="%.3f")
     info = file_name.split('-')[1].split('_obj_')
     datetimestr = info[0]
     norad_cat_id = info[1].split('_')[0]

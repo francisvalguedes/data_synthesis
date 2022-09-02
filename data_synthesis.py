@@ -5,7 +5,13 @@ from datetime import date
 from datetime import datetime, timedelta
 import numpy as np
 
-satcat_df = pd.read_csv('https://celestrak.org/pub/satcat.csv') 
+satcat_db_ok = True
+try:
+    satcat_df = pd.read_csv('https://celestrak.org/pub/satcat.csv') 
+    satcat_db_ok = True
+except:
+    satcat_db_ok = False
+    print('satcat link error')
 
 txt_files = glob.glob('trajetory/*.trn')
 # print(txt_files)
@@ -22,22 +28,25 @@ for file_name in txt_files:
     datetimestr = info[0]
     norad_cat_id = info[1].split('_')[0]
     datetime_object = datetime.strptime(datetimestr, '%Y%m%d_%H%M%S') - timedelta(seconds=1)
-    print(datetime_object.strftime("%Y-%m-%dT%H:%M:%S.%f"))
-    print(norad_cat_id)
+    # print(datetime_object.strftime("%Y-%m-%dT%H:%M:%S.%f"))
+    # print(norad_cat_id)
     rd_range = 0.001*np.linalg.norm(df,axis=1)
     min_index = np.argmin(rd_range)
     min_rd_range = rd_range[min_index]
     datetime_object_min = datetime_object + timedelta(seconds=int(min_index))
 
-    index_satcat = satcat_df.loc[satcat_df['NORAD_CAT_ID']==int(norad_cat_id)].index
-
-    if satcat_df.loc[index_satcat, 'RCS'].empty :
-        rcs = 0.0
-    else:
-        rcs = float(satcat_df.loc[index_satcat, 'RCS'] )
-  
+    obj_name = ''
+    rcs = 0.0
+    if satcat_db_ok:
+        index_satcat = satcat_df.loc[satcat_df['NORAD_CAT_ID']==int(norad_cat_id)].index
+        obj_name = satcat_df.loc[index_satcat, 'OBJECT_NAME'].to_string(index=False)
+        if satcat_df.loc[index_satcat, 'RCS'].empty :
+            rcs = 0.0
+        else:
+            rcs = float(satcat_df.loc[index_satcat, 'RCS'] )
+ 
     data["NORAD_CAT_ID"].append(norad_cat_id)
-    data["OBJECT_NAME"].append(satcat_df.loc[index_satcat, 'OBJECT_NAME'].to_string(index=False))
+    data["OBJECT_NAME"].append(obj_name)
     data["RCS"].append(rcs)
     data["H0"].append(datetime_object.strftime("%Y-%m-%dT%H:%M:%S.%f"))
     data["RANGE_H0"].append(rd_range[0])

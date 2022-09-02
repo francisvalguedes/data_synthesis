@@ -3,6 +3,18 @@ import pandas as pd
 # import re
 from datetime import datetime, timedelta
 import numpy as np
+import os
+
+def dellfiles(file):
+    py_files = glob.glob(file)
+    err = 0
+    for py_file in py_files:
+        try:
+            os.remove(py_file)
+        except OSError as e:
+            print(f"Error:{e.strerror}")
+            err = e.strerror
+    return err
 
 satcat_db_ok = False
 print('Downloading Celestrak satcat file')
@@ -16,9 +28,11 @@ except:
 
 txt_files = glob.glob('trajectory/*.trn')
 # print(txt_files)
+dellfiles('output/*.trn')
 
 data = {'NORAD_CAT_ID':[], 'OBJECT_NAME':[], "RCS":[], "H0":[], "RANGE_H0":[],"MIN_RANGE_H":[],"MIN_RANGE_PT":[],
                     "MIN_RANGE":[],"END_H":[], "END_PT":[], "END_RANGE":[] }
+
 
 print('Reading trajectory files for summary')
 for file_name in txt_files:

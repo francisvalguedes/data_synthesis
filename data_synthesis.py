@@ -40,7 +40,12 @@ for file_name in txt_files:
     df = pd.read_csv(file_name,skiprows=[0,1], header=None)
     #df.columns = ['ENU_E','ENU_N','ENU_U']
     df.to_csv( 'output' + file_name.split('trajectory')[1], index=False, header=[str(len(df.index)-1),'1000','1'],float_format="%.3f")
-    info = file_name.split('-')[1].split('_obj_')
+    
+    if file_name.find('-') != -1:
+        info = file_name.split('-')[1].split('_obj_')
+    else:
+        info = file_name.split(os.sep)[1].split('_obj_')
+
     datetimestr = info[0]
     norad_cat_id = info[1].split('_')[0]
     datetime_object = datetime.strptime(datetimestr, '%Y%m%d_%H%M%S') + timedelta(seconds=1)

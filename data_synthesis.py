@@ -26,9 +26,9 @@ except:
     satcat_db_ok = False
     print('satcat file error')
 
-txt_files = glob.glob('trajectory/*.trn')
+txt_files = glob.glob('trajectory'+ os.sep +'*.trn')
 # print(txt_files)
-dellfiles('output/*.trn')
+dellfiles('output'+ os.sep +'*.trn')
 
 data = {'NORAD_CAT_ID':[], 'OBJECT_NAME':[], "RCS":[], "H0":[], "RANGE_H0":[],"MIN_RANGE_H":[],"MIN_RANGE_PT":[],
                     "MIN_RANGE":[],"END_H":[], "END_PT":[], "END_RANGE":[], "FILE_NAME":[] }
@@ -81,7 +81,10 @@ for file_name in txt_files:
 
 print('Writing summary')
 df_synthesis = pd.DataFrame(data)
-df_synthesis.to_csv('output/summary.csv',  index=False) # encoding='utf-8',
+
+df_synthesis = df_synthesis.sort_values(by='NORAD_CAT_ID')
+
+df_synthesis.to_csv('output'+ os.sep +'summary.csv',  index=False) # encoding='utf-8',
 
 print(df_synthesis)
 print('End')

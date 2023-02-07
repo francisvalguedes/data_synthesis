@@ -1,5 +1,5 @@
 import pandas as pd
-
+import os
 
 print('Downloading Celestrak satcat file')
 try:
@@ -8,4 +8,4 @@ try:
 except:
     print('satcat download error')
 
-satcat_df.to_csv('satcat.csv',  index=False)
+satcat_df.to_csv(os.path.join('data','satcat.csv'),  index=False)

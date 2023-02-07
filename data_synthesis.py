@@ -31,7 +31,7 @@ txt_files = glob.glob('trajectory/*.trn')
 dellfiles('output/*.trn')
 
 data = {'NORAD_CAT_ID':[], 'OBJECT_NAME':[], "RCS":[], "H0":[], "RANGE_H0":[],"MIN_RANGE_H":[],"MIN_RANGE_PT":[],
-                    "MIN_RANGE":[],"END_H":[], "END_PT":[], "END_RANGE":[] }
+                    "MIN_RANGE":[],"END_H":[], "END_PT":[], "END_RANGE":[], "FILE_NAME":[] }
 
 
 print('Reading trajectory files for summary')
@@ -77,6 +77,7 @@ for file_name in txt_files:
     data["END_H"].append((datetime_object + timedelta(seconds= len(df.index))).strftime("%Y-%m-%dT%H:%M:%S.%f"))
     data["END_PT"].append( len(df.index))
     data["END_RANGE"].append(rd_range[-1])
+    data["FILE_NAME"].append(file_name)
 
 print('Writing summary')
 df_synthesis = pd.DataFrame(data)
